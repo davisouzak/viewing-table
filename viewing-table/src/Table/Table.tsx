@@ -1,0 +1,113 @@
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+
+interface Employees {
+	id: number
+	name: string
+	job: string
+	admission_date: string
+	phone: string
+	image: string
+}
+
+const App: React.FC = () => {
+	const [employees, setEmployees] = useState<Employees[]>([])
+
+	useEffect(() => {
+		async function fetchData() {
+			try {
+				const response = await axios.get('/db.json')
+				setEmployees(response.data.employees)
+			} catch (error) {
+				console.error('Erro ao buscar dados:', error)
+			}
+		}
+
+		fetchData()
+	}, [])
+
+	const formatDate = (dateString: string) => {
+		const date = new Date(dateString)
+		const day = String(date.getDate()).padStart(2, '0')
+		const mounth = String(date.getMonth() + 1).padStart(2, '0')
+		const year = date.getFullYear()
+		return `${day}/${mounth}/${year}`
+	}
+
+    const formatPhone = (phone: string) => {
+        const cleaned = phone.replace(/\D/g, '')
+        return cleaned.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '+$1 ($2) $3-$4')
+    }
+
+	return (
+		<div className='p-5'>
+			<div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
+				<table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+					<thead className='text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400'>
+						<tr style={{ backgroundColor: '#0500FF', color: '#FFFFFF' }}>
+							<th
+								scope='col'
+								className='px-6 py-3'
+							>
+								FOTO
+							</th>
+							<th
+								scope='col'
+								className='px-6 py-3'
+							>
+								NOME
+							</th>
+							<th
+								scope='col'
+								className='px-6 py-3'
+							>
+								CARGO
+							</th>
+							<th
+								scope='col'
+								className='px-6 py-3'
+							>
+								DATA DE ADMISSÃO
+							</th>
+							<th
+								scope='col'
+								className='px-6 py-3'
+							>
+								TELEFONE
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{employees.map((employee) => (
+							<tr
+								key={employee.id}
+								className='bg-white border-b text-black'
+							>
+								<th
+									scope='row'
+									className='px-6 py-4 font-medium'
+								>
+									<img
+										src={employee.image}
+										alt={employee.name}
+										className='w-10 h-10 rounded-full'
+									/>
+								</th>
+								<td className='px-6 py-4'>{employee.name}</td>
+								<td className='px-6 py-4'>{employee.job}</td>   
+								<td className='px-6 py-4'>
+									{formatDate(employee.admission_date)}
+								</td>
+								<td className='px-6 py-4'>
+                                    {formatPhone(employee.phone)}
+                                </td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	)
+}
+
+export default App

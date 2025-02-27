@@ -7,7 +7,7 @@ export default function SearchBar() {
 					placeholder='Pesquisar'
 				/>
 				<button
-					className='absolute top-1 right-1 flex items-center rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-sm text-white'
+					className='absolute top-1 right-1 flex items-center rounded py-1 px-2.5 border border-transparent text-center text-sm text-white'
 					type='button'
 				>
 					<svg

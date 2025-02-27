@@ -6,7 +6,7 @@ export default function App() {
     <>
       <div className="text-2xl flex justify-between items-center p-5 gap-4">
         <h1 className='font-bold'>Funcionarios</h1>
-        <div className='flex'>
+        <div>
           <SearchBar/>
         </div>
       </div>
