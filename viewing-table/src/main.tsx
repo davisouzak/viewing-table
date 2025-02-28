@@ -6,9 +6,9 @@ import Header from './Header/Header.tsx'
 import Table from './Table/Table.tsx'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Header />
-    <App />
-    <Table />
-  </StrictMode>,
+	<StrictMode>
+		<Header />
+		<App />
+		<Table />
+	</StrictMode>
 )

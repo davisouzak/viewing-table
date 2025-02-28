@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import SearchBar from '../SearchBar/SearchBar'
 
 interface Employees {
 	id: number
@@ -10,8 +11,9 @@ interface Employees {
 	image: string
 }
 
-const App: React.FC = () => {
+const Table: React.FC = () => {
 	const [employees, setEmployees] = useState<Employees[]>([])
+	const [searchTerm, setSearchTerm] = useState<string>('')
 
 	useEffect(() => {
 		async function fetchData() {
@@ -34,13 +36,28 @@ const App: React.FC = () => {
 		return `${day}/${mounth}/${year}`
 	}
 
-    const formatPhone = (phone: string) => {
-        const cleaned = phone.replace(/\D/g, '')
-        return cleaned.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '+$1 ($2) $3-$4')
-    }
+	const formatPhone = (phone: string) => {
+		const cleaned = phone.replace(/\D/g, '')
+		return cleaned.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '+$1 ($2) $3-$4')
+	}
+
+	const filteredEmployees = employees.filter((employee) => {
+		const searchLower = searchTerm.toLowerCase()
+		return (
+			employee.name.toLowerCase().includes(searchLower) ||
+			employee.job.toLowerCase().includes(searchLower) ||
+			formatPhone(employee.phone).toLowerCase().includes(searchLower)
+		)
+	})
 
 	return (
 		<div className='p-5'>
+			<div className='flex justify-end p-5 items-start relative -mt-23'>
+				<SearchBar
+					searchTerm={searchTerm}
+					onSearchChange={setSearchTerm}
+				/>{' '}
+			</div>
 			<div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
 				<table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
 					<thead className='text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400'>
@@ -78,7 +95,7 @@ const App: React.FC = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{employees.map((employee) => (
+						{filteredEmployees.map((employee) => (
 							<tr
 								key={employee.id}
 								className='bg-white border-b text-black'
@@ -94,13 +111,11 @@ const App: React.FC = () => {
 									/>
 								</th>
 								<td className='px-6 py-4'>{employee.name}</td>
-								<td className='px-6 py-4'>{employee.job}</td>   
+								<td className='px-6 py-4'>{employee.job}</td>
 								<td className='px-6 py-4'>
 									{formatDate(employee.admission_date)}
 								</td>
-								<td className='px-6 py-4'>
-                                    {formatPhone(employee.phone)}
-                                </td>
+								<td className='px-6 py-4'>{formatPhone(employee.phone)}</td>
 							</tr>
 						))}
 					</tbody>
@@ -110,4 +125,4 @@ const App: React.FC = () => {
 	)
 }
 
-export default App
+export default Table

@@ -1,10 +1,19 @@
-export default function SearchBar() {
+import React from "react"
+
+interface SearchBarProps {
+	searchTerm: string
+	onSearchChange: (term: string) => void
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSearchChange }) => {
 	return (
 		<div className='w-full max-w-sm min-w-[200px]'>
 			<div className='relative'>
 				<input
 					className='w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow'
 					placeholder='Pesquisar'
+					value={searchTerm}
+					onChange={(e) => onSearchChange(e.target.value)}
 				/>
 				<button
 					className='absolute top-1 right-1 flex items-center rounded py-1 px-2.5 border border-transparent text-center text-sm text-white'
@@ -23,3 +32,5 @@ export default function SearchBar() {
 		</div>
 	)
 }
+
+export default SearchBar
