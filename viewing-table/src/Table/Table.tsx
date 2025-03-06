@@ -52,16 +52,26 @@ const Table: React.FC = () => {
 
 	return (
 		<div className='p-5'>
-			<div className='flex justify-end p-5 items-start relative -mt-23'>
-				<SearchBar
-					searchTerm={searchTerm}
-					onSearchChange={setSearchTerm}
-				/>{' '}
+			<div className='text-2xl flex flex-col sm:flex-row justify-between p-5'>
+				<h1 className='font-bold mb-4 sm:mb-0'>Funcionarios</h1>
+
+				<div className='w-full sm:flex justify-end'>
+					<SearchBar
+						searchTerm={searchTerm}
+						onSearchChange={setSearchTerm}
+					/>
+				</div>
 			</div>
 			<div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
 				<table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
 					<thead className='text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400'>
-						<tr style={{ backgroundColor: '#0500FF', color: '#FFFFFF' }}>
+						<tr
+							style={{
+								backgroundColor: '#0500FF',
+								color: '#FFFFFF',
+								width: 100,
+							}}
+						>
 							<th
 								scope='col'
 								className='px-6 py-3'
@@ -76,19 +86,19 @@ const Table: React.FC = () => {
 							</th>
 							<th
 								scope='col'
-								className='px-6 py-3'
+								className='px-6 py-3 hidden sm:table-cell'
 							>
 								CARGO
 							</th>
 							<th
 								scope='col'
-								className='px-6 py-3'
+								className='px-6 py-3 hidden sm:table-cell'
 							>
 								DATA DE ADMISSÃO
 							</th>
 							<th
 								scope='col'
-								className='px-6 py-3'
+								className='px-6 py-3 hidden sm:table-cell'
 							>
 								TELEFONE
 							</th>
@@ -111,11 +121,15 @@ const Table: React.FC = () => {
 									/>
 								</th>
 								<td className='px-6 py-4'>{employee.name}</td>
-								<td className='px-6 py-4'>{employee.job}</td>
-								<td className='px-6 py-4'>
+								<td className='px-6 py-4 hidden sm:table-cell'>
+									{employee.job}
+								</td>
+								<td className='px-6 py-4 hidden sm:table-cell'>
 									{formatDate(employee.admission_date)}
 								</td>
-								<td className='px-6 py-4'>{formatPhone(employee.phone)}</td>
+								<td className='px-6 py-4 hidden sm:table-cell'>
+									{formatPhone(employee.phone)}
+								</td>
 							</tr>
 						))}
 					</tbody>
