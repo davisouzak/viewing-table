@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import SearchBar from '../SearchBar/SearchBar'
+import iconCollapsed from '../assets/icons/charm_chevron-up.svg'
+import iconExpanded from '../assets/icons/charm_chevron-down.svg'
 
 interface Employees {
 	id: number
@@ -14,6 +16,7 @@ interface Employees {
 const Table: React.FC = () => {
 	const [employees, setEmployees] = useState<Employees[]>([])
 	const [searchTerm, setSearchTerm] = useState<string>('')
+	const [openAccordionId, setOpenAccordionId] = useState<number | null>(null)
 
 	useEffect(() => {
 		async function fetchData() {
@@ -31,9 +34,9 @@ const Table: React.FC = () => {
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString)
 		const day = String(date.getDate()).padStart(2, '0')
-		const mounth = String(date.getMonth() + 1).padStart(2, '0')
+		const month = String(date.getMonth() + 1).padStart(2, '0')
 		const year = date.getFullYear()
-		return `${day}/${mounth}/${year}`
+		return `${day}/${month}/${year}`
 	}
 
 	const formatPhone = (phone: string) => {
@@ -50,11 +53,14 @@ const Table: React.FC = () => {
 		)
 	})
 
+	const toggleAccordion = (id: number) => {
+		setOpenAccordionId(openAccordionId === id ? null : id)
+	}
+
 	return (
 		<div className='p-5'>
 			<div className='text-2xl flex flex-col sm:flex-row justify-between p-5'>
 				<h1 className='font-bold mb-4 sm:mb-0'>Funcionarios</h1>
-
 				<div className='w-full sm:flex justify-end'>
 					<SearchBar
 						searchTerm={searchTerm}
@@ -64,7 +70,7 @@ const Table: React.FC = () => {
 			</div>
 			<div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
 				<table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-					<thead className='text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400'>
+					<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400'>
 						<tr
 							style={{
 								backgroundColor: '#0500FF',
@@ -106,31 +112,85 @@ const Table: React.FC = () => {
 					</thead>
 					<tbody>
 						{filteredEmployees.map((employee) => (
-							<tr
-								key={employee.id}
-								className='bg-white border-b text-black'
-							>
-								<th
-									scope='row'
-									className='px-6 py-4 font-medium'
+							<React.Fragment key={employee.id}>
+								<tr
+									className='bg-white border-b text-black sm:hidden'
+									onClick={() => toggleAccordion(employee.id)}
 								>
-									<img
-										src={employee.image}
-										alt={employee.name}
-										className='w-10 h-10 rounded-full'
-									/>
-								</th>
-								<td className='px-6 py-4'>{employee.name}</td>
-								<td className='px-6 py-4 hidden sm:table-cell'>
-									{employee.job}
-								</td>
-								<td className='px-6 py-4 hidden sm:table-cell'>
-									{formatDate(employee.admission_date)}
-								</td>
-								<td className='px-6 py-4 hidden sm:table-cell'>
-									{formatPhone(employee.phone)}
-								</td>
-							</tr>
+									<th
+										scope='row'
+										className='px-6 py-4 font-medium'
+									>
+										<img
+											src={employee.image}
+											alt={employee.name}
+											className='w-10 h-10 rounded-full'
+										/>
+									</th>
+									<td className='px-6 py-4 flex justify-between items-center'>
+										{employee.name}
+										<button
+											onClick={(e) => {
+												e.stopPropagation()
+												toggleAccordion(employee.id) 
+											}}
+										>
+											<img
+												src={
+													openAccordionId === employee.id
+														? iconCollapsed
+														: iconExpanded
+												}
+												alt='Dropdown'
+												className='w-5 h-5'
+												style={{
+													filter: 'brightness(0) saturate(100%) invert(9%) sepia(100%) saturate(7482%) hue-rotate(247deg) brightness(100%) contrast(143%)',
+												  }}
+											/>
+										</button>
+									</td>
+								</tr>
+								{openAccordionId === employee.id && (
+									<tr className='bg-white border-b text-black sm:hidden'>
+										<td
+											colSpan={2}
+											className='px-6 py-4'
+										>
+											<div>
+												<p>
+													<strong>Cargo:</strong> {employee.job}
+												</p>
+												<p>
+													<strong>Data de Admissão:</strong>{' '}
+													{formatDate(employee.admission_date)}
+												</p>
+												<p>
+													<strong>Telefone:</strong>{' '}
+													{formatPhone(employee.phone)}
+												</p>
+											</div>
+										</td>
+									</tr>
+								)}
+								<tr className='bg-white border-b text-black hidden sm:table-row'>
+									<th
+										scope='row'
+										className='px-6 py-4 font-medium'
+									>
+										<img
+											src={employee.image}
+											alt={employee.name}
+											className='w-10 h-10 rounded-full'
+										/>
+									</th>
+									<td className='px-6 py-4'>{employee.name}</td>
+									<td className='px-6 py-4'>{employee.job}</td>
+									<td className='px-6 py-4'>
+										{formatDate(employee.admission_date)}
+									</td>
+									<td className='px-6 py-4'>{formatPhone(employee.phone)}</td>
+								</tr>
+							</React.Fragment>
 						))}
 					</tbody>
 				</table>
