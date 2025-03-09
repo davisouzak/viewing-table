@@ -1,4 +1,4 @@
-import logo from "../assets/Logo.svg"
+import logo from '../../assets/LogoBeTalent.svg'
 
 export default function Logo() {
     return (

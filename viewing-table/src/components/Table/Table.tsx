@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import SearchBar from '../SearchBar/SearchBar'
-import iconCollapsed from '../assets/icons/charm_chevron-up.svg'
-import iconExpanded from '../assets/icons/charm_chevron-down.svg'
+import iconCollapsed from '../../assets/icons/charm_chevron-up.svg'
+import iconExpanded from '../../assets/icons/charm_chevron-down.svg'
 
 interface Employees {
 	id: number
