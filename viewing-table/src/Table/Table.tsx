@@ -68,7 +68,7 @@ const Table: React.FC = () => {
 					/>
 				</div>
 			</div>
-			<div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
+			<div className='relative overflow-x-auto shadow-md rounded-lg sm:rounded-lg'>
 				<table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
 					<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400'>
 						<tr
@@ -86,9 +86,10 @@ const Table: React.FC = () => {
 							</th>
 							<th
 								scope='col'
-								className='px-6 py-3'
+								className='px-6 py-3 relative'
 							>
 								NOME
+								<span className='absolute right-0 top-1/2 transform -translate-y-1/2 w-2 h-2 mr-7.5 bg-white rounded-full sm:hidden flex'></span>
 							</th>
 							<th
 								scope='col'
@@ -132,7 +133,7 @@ const Table: React.FC = () => {
 										<button
 											onClick={(e) => {
 												e.stopPropagation()
-												toggleAccordion(employee.id) 
+												toggleAccordion(employee.id)
 											}}
 										>
 											<img
@@ -144,34 +145,40 @@ const Table: React.FC = () => {
 												alt='Dropdown'
 												className='w-5 h-5'
 												style={{
-													filter: 'brightness(0) saturate(100%) invert(9%) sepia(100%) saturate(7482%) hue-rotate(247deg) brightness(100%) contrast(143%)',
-												  }}
+													filter:
+														'brightness(0) saturate(100%) invert(9%) sepia(100%) saturate(7482%) hue-rotate(247deg) brightness(100%) contrast(143%)',
+												}}
 											/>
 										</button>
 									</td>
 								</tr>
-								{openAccordionId === employee.id && (
-									<tr className='bg-white border-b text-black sm:hidden'>
-										<td
-											colSpan={2}
-											className='px-6 py-4'
+								<tr className='bg-white border-b text-black sm:hidden'>
+									<td
+										colSpan={2}
+										className={`px-6 transition-all ease-in-out duration-300 ${
+											openAccordionId === employee.id
+												? 'max-h-screen py-4'
+												: 'max-h-0 py-0 overflow-hidden'
+										}`}
+									>
+										<div
+											className={`${
+												openAccordionId === employee.id ? 'block' : 'hidden'
+											}`}
 										>
-											<div>
-												<p>
-													<strong>Cargo:</strong> {employee.job}
-												</p>
-												<p>
-													<strong>Data de Admissão:</strong>{' '}
-													{formatDate(employee.admission_date)}
-												</p>
-												<p>
-													<strong>Telefone:</strong>{' '}
-													{formatPhone(employee.phone)}
-												</p>
-											</div>
-										</td>
-									</tr>
-								)}
+											<p>
+												<strong>Cargo:</strong> {employee.job}
+											</p>
+											<p>
+												<strong>Data de Admissão:</strong>{' '}
+												{formatDate(employee.admission_date)}
+											</p>
+											<p>
+												<strong>Telefone:</strong> {formatPhone(employee.phone)}
+											</p>
+										</div>
+									</td>
+								</tr>
 								<tr className='bg-white border-b text-black hidden sm:table-row'>
 									<th
 										scope='row'
