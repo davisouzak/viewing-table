@@ -1,5 +1,5 @@
-import Header from './Header/Header'
-import Table from './Table/Table'
+import Header from './components/Header/Header'
+import Table from './components/Table/Table'
 
 function App() {
 	return (
